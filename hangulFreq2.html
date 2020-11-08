@@ -230,7 +230,11 @@ function switchToBW() {
 
 function switchToHSL() {
     for (i=44032; i<55204; i++) {
-        var thisVal = (1-freqDict["char"+i])*240;
+        if ("char"+i in freqDict) {
+          var thisVal = (1-freqDict["char"+i])*240; }
+        else {
+          var thisVal = 240;
+        }
         //freqDict["char" + (elem+44032)];
         document.getElementById("char"+i).style.backgroundColor = "hsl(" + thisVal + ",100%,50%)";  // we specify an hsl value, but s and l are constant.
         // Hue is thisVal, calculated above.
@@ -249,9 +253,8 @@ function reorderByFreq() {
     for (var i = 44032; i < 55204; i++) {
       codesNotYetUsed.push(i.toString());
     }
-    console.log(codesNotYetUsed);
 
-    for (var i = 0; i<11172; i++) {
+    for (var i = 0; i<2949; i++) {    // this section orders the 2949 blocks that have at least 1 instance
       if (i % 28 == 0) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
           var rowBlock = document.createElement("div");   // create new div
           document.getElementById("container").appendChild(rowBlock);
@@ -263,7 +266,7 @@ function reorderByFreq() {
 
       var currentMaxValue = Math.max.apply(Math,valuesArray);
       var dictionaryKeyWithChar = Object.keys(freqDict).find(key => ( freqDict[key] == currentMaxValue && codesNotYetUsed.includes(key.slice(4,9))));
-      console.log(dictionaryKeyWithChar);
+      //console.log(dictionaryKeyWithChar);
       var correctUnicodePoint = dictionaryKeyWithChar.slice(4,9);
       valuesArray.splice(valuesArray.indexOf(currentMaxValue),1);
       codesNotYetUsed.splice(codesNotYetUsed.indexOf(correctUnicodePoint),1)
@@ -279,6 +282,29 @@ function reorderByFreq() {
       block.style.fontSize = "18pt";
       block.setAttribute('onclick','showSpecific(this)');
 
+    }
+    //for (var i = 0; i<11172; i++) {
+
+
+    //}
+    console.log(codesNotYetUsed);
+    for (var i = 0; i<8223; i++) {
+      if (i % 28 == 0) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
+          var rowBlock = document.createElement("div");   // create new div
+          document.getElementById("container").appendChild(rowBlock);
+      }
+      //console.log(String.fromCharCode(codesNotYetUsed[i]));
+        var block = document.createElement("span");   // create new span
+        var textContent = document.createTextNode( String.fromCharCode(codesNotYetUsed[i])  );    // make some content: it's a string in Hangul
+        block.appendChild(textContent);               // put the text content in the span
+        rowBlock.appendChild(block);                  // put the span in the most-recently created div
+
+        block.setAttribute('id','char'+codesNotYetUsed[i]);            // set the span's id to, e.g. 'char45678'
+        block.setAttribute('class','mainDisplayHangul');
+
+        block.style.width = "100px";
+        block.style.fontSize = "18pt";
+        block.setAttribute('onclick','showSpecific(this)');
     }
     //console.log(syllableBlocksInOrder);
 }
