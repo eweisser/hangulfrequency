@@ -4,15 +4,17 @@
 
 <style>
 
-.span {
+span {
 font: #000000;
+font-size: 24px;
+display: inline-block;
 }
 
 #container {
 background-color: #FFFFFF;
 position: absolute;
 left: 0%;
-width: 90%;
+width: 672px;
 height: 90%;
 top: 0px;
 }
@@ -120,7 +122,7 @@ margin-bottom: 5px;
 position: relative;
 font-size: large;
 text-align: left;
-left: 50%;
+left: 55%;
 margin-top: 10px;
 margin-bottom: 5px;
 }
@@ -150,51 +152,25 @@ var valuesArray = Object.values(freqDict);
 var sortedValues = valuesArray.sort(function(a, b){return b - a});
 var sortedWithKeysByValues = [];
 
-//while (true) {
-//  var currentMax = -1;
-//  var keyOfMax = "";
-//  for (key in freqDict) {
-//    if (freqDict[key] > currentMax && sortedWithKeysByValues.includes(key)) {
-//      currentMax = freqDict[key];
-//      keyOfMax = key; }
-//  }
-//  if (currentMax == -1) {
-//    break; }
-//  else {
-//    sortedWithKeysByValues.push(keyOfMax); }
-//}
-//console.log(sortedWithKeysByValues);
-
-
-
-
-//function myFunction() {
-//    glyph = String.fromCharCode(44060);
-//    document.getElementById('display').style.fontSize = '160pt';
-//    document.getElementById('display').style.height = (window.getComputedStyle(document.getElementById('display'))).getPropertyValue('width');
-//    document.getElementById('display').innerHTML = glyph;
-//}
 
 function showAll() {
     //var rowVertPos = 5;
     for (i=44032; i<55204; i++) {   // these are the bounds of the Unicode range for Hangul
-        if (i % 28 == 16) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
-            var rowBlock = document.createElement("div");   // create new div
-            document.getElementById("container").appendChild(rowBlock);
-        }
+        //if (i % 28 == 16) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
+        //    var rowBlock = document.createElement("div");   // create new div
+        //    document.getElementById("container").appendChild(rowBlock);
+        //}
 
         var block = document.createElement("span");   // create new span
         var textContent = document.createTextNode(String.fromCharCode(i));    // make some content: it's a string in Hangul
         block.appendChild(textContent);               // put the text content in the span
-        rowBlock.appendChild(block);                  // put the span in the most-recently created div
+        document.getElementById("container").appendChild(block);                  // put the span in the most-recently created div
         //var elementForInsertion = document.getElementById("container");
 
 
         block.setAttribute('id','char'+i);            // set the span's id to, e.g. 'char45678'
         block.setAttribute('class','mainDisplayHangul');
 
-        block.style.width = "100px";
-        block.style.fontSize = "18pt";
         block.setAttribute('onclick','showSpecific(this)');
 
     }
@@ -255,12 +231,6 @@ function reorderByFreq() {
     }
 
     for (var i = 0; i<2949; i++) {    // this section orders the 2949 blocks that have at least 1 instance
-      if (i % 28 == 0) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
-          var rowBlock = document.createElement("div");   // create new div
-          document.getElementById("container").appendChild(rowBlock);
-      }
-
-      // try not making a new div every 28 chars--if you specify a width, it'll jump to the next line anyway
 
       var block = document.createElement("span");   // create new span
 
@@ -272,38 +242,26 @@ function reorderByFreq() {
       codesNotYetUsed.splice(codesNotYetUsed.indexOf(correctUnicodePoint),1)
       var textContent = document.createTextNode( String.fromCharCode(correctUnicodePoint)  );    // make some content: it's a string in Hangul
       block.appendChild(textContent);               // put the text content in the span
-      rowBlock.appendChild(block);                  // put the span in the most-recently created div
+      document.getElementById("container").appendChild(block);                  // put the span in the most-recently created div
       //var elementForInsertion = document.getElementById("container");
 
       block.setAttribute('id','char'+correctUnicodePoint);            // set the span's id to, e.g. 'char45678'
       block.setAttribute('class','mainDisplayHangul');
 
-      block.style.width = "100px";
-      block.style.fontSize = "18pt";
       block.setAttribute('onclick','showSpecific(this)');
 
     }
-    //for (var i = 0; i<11172; i++) {
 
 
-    //}
-    console.log(codesNotYetUsed);
     for (var i = 0; i<8223; i++) {
-      if (i % 28 == 0) {         // whenever the Unicode point, mod 28, equals 16, create a row. Note that 44032 % 28 = 16.
-          var rowBlock = document.createElement("div");   // create new div
-          document.getElementById("container").appendChild(rowBlock);
-      }
-      //console.log(String.fromCharCode(codesNotYetUsed[i]));
         var block = document.createElement("span");   // create new span
         var textContent = document.createTextNode( String.fromCharCode(codesNotYetUsed[i])  );    // make some content: it's a string in Hangul
         block.appendChild(textContent);               // put the text content in the span
-        rowBlock.appendChild(block);                  // put the span in the most-recently created div
+        document.getElementById("container").appendChild(block);                  // put the span in the most-recently created div
 
         block.setAttribute('id','char'+codesNotYetUsed[i]);            // set the span's id to, e.g. 'char45678'
         block.setAttribute('class','mainDisplayHangul');
 
-        block.style.width = "100px";
-        block.style.fontSize = "18pt";
         block.setAttribute('onclick','showSpecific(this)');
     }
     //console.log(syllableBlocksInOrder);
@@ -327,8 +285,6 @@ function reorderByHangul() {
       block.setAttribute('id','char'+i);            // set the span's id to, e.g. 'char45678'
       block.setAttribute('class','mainDisplayHangul');
 
-      block.style.width = "100px";
-      block.style.fontSize = "18pt";
       block.setAttribute('onclick','showSpecific(this)');
     }
     switchToHSL();
@@ -383,8 +339,6 @@ function reorderByHangulFirstRowVariableVowel() {
       block.setAttribute('id','char'+i);            // set the span's id to, e.g. 'char45678'
       block.setAttribute('class','mainDisplayHangul');
 
-      block.style.width = "100px";
-      block.style.fontSize = "18pt";
       block.setAttribute('onclick','showSpecific(this)');
       if (i % 588 == 519) {   // if the coda is -ih...
         i = i + 1;
@@ -400,39 +354,24 @@ function reorderByHangulFirstRowVariableVowel() {
     // gih is 44619; kkih is 45207; nih is 45795; dih is 46383...hih is 55203
 }
 
-//var element = document.getElementById('image_1'),
-//    style = window.getComputedStyle(element),
-//    top = style.getPropertyValue('top');
-
-//44032     U+AC00  ga
-    //44033     U+AC01  gag
-    //44048     U+AC10  gam
-    //44059     U+AC1B  gah (28 in a set)
-//44060     U+AC1C  gae
-//55203     U+D7A3  hing
-
-//      55203-44032 = 11172 possible blocks, so 11172 entries in the dictionary
-//      total of 458,345,295 blocks in the corpus
 
 function condense() {
+  document.getElementById("container").style.width = "168px";
   var x = document.getElementsByClassName("mainDisplayHangul");
   var i;
   for (i = 0; i < x.length; i++) {
     x[i].innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-    x[i].style.width = "10px";
-    x[i].style.height = "10px";
-    x[i].style.fontSize = "4pt";
+    x[i].style.fontSize = "6px";
     x[i].style.lineHeight = "6px";
   }
 }
 
 function expand() {
+  document.getElementById("container").style.width = "672px";
   var x = document.getElementsByClassName("mainDisplayHangul");
   var i;
   for (i = 0; i < x.length; i++) {
     x[i].innerHTML = String.fromCharCode(x[i].id.slice(4,9));
-    x[i].style.width = "10px";
-    x[i].style.height = "10px";
     x[i].style.fontSize = "18pt";
     x[i].style.lineHeight = "normal";
   }
