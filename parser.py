@@ -1,4 +1,4 @@
-fileHandle = open("KCC150_Korean_sentences_UTF8.txt", "r", encoding="utf-8")
+fileHandle = open("corpusKCC150_Korean_sentences_UTF8.txt", "r", encoding="utf-8")
 corpusContents = fileHandle.read()
 blockDict = {}
 blockDictLog = {}
@@ -17,6 +17,7 @@ import math
 
 for i in range(44032,55204):        # dictionary keys are hangul, e.g. 상
     blockDict[chr(i)] = 0
+# Now we have a dictionary with all the Hangul syllable blocks as keys, but each just has a value of 0.
 
 # inserting the dictionary values: the number of instances of the sylblock:
 
@@ -37,12 +38,49 @@ for i in range(44032,55204):
     #percentageOfMaxDict[keyName] = blockDict[chr(i)] / 14882952
     #percentageOfMaxDict255[keyName] = 255*blockDict[chr(i)] / 14882952
     blockDictLog[keyName] = math.log(blockDict[chr(i)]+1) / maxLog
-    
+
 
 #print(percentageOfMaxDict)
 #print(percentageOfMaxDict255)
-print(blockDictLog)
+#print(blockDictLog)
 
+
+
+
+
+
+# On November 11, 2020, I wanted to sort Hangul blocks by frequency, so I did the following:
+dictionaryForRanking = {}
+blocksInDecreasingFrequency = ''
+keysForRanking = []
+valuesForRanking = []
+
+
+for k in range(44032,55204):        # dictionary keys are hangul, e.g. 상
+    dictionaryForRanking[chr(k)] = 0
+
+for m in corpusContents:
+    #print(corpusContents[j])
+    if ord(m) >= 44032 and ord(m) <= 55203:
+        #print(ord(corpusContents[j]))
+        #blockDict[ord(corpusContents[j])] += 1
+        dictionaryForRanking[m] += 1
+
+for x in dictionaryForRanking.values():
+    valuesForRanking.append(x)
+for y in dictionaryForRanking.keys():
+    keysForRanking.append(y)
+
+while len(valuesForRanking) > 0:
+    maxValue = max(valuesForRanking)
+    for n in keysForRanking:
+        if dictionaryForRanking[n] == maxValue:
+            blocksInDecreasingFrequency = blocksInDecreasingFrequency + n
+            keysForRanking.remove(n)
+            break
+    valuesForRanking.remove(maxValue)
+
+print(blocksInDecreasingFrequency)
 
 
 

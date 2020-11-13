@@ -131,6 +131,7 @@ margin-bottom: 5px;
   position: absolute;
   right: 0;
   font-style: italic;
+  font-size: 14pt;
 }
 
 </style>
@@ -188,12 +189,14 @@ function showSpecific(elem) {
     document.getElementById("specific").style.border = "1px solid #D0D0D0";
     document.getElementById("specificBlockBigDisplay").innerHTML = String.fromCharCode(elem.id.slice(4,9));
     var dictVal = freqDict["char" + elem.id.slice(4,9)]
-    document.getElementById("specificDetails").innerHTML = "instances in corpus: " + Math.round(10 ** (dictVal*7.17268911027) - 1);
-    document.getElementById("specificDetails").innerHTML += "<br>proportion of max (" + String.fromCharCode(45796) + "): " + Math.round((Math.round(10 ** (dictVal*7.17268911027) - 1) / 14882952)*10000000) / 10000000;
-    document.getElementById("specificDetails").innerHTML += "<br>rank: " + sortedValues.indexOf(dictVal);
+    document.getElementById("specificDetails").innerHTML = "instances in corpus: " + (dictVal ? Math.round(10 ** (dictVal*7.17268911027) - 1) : 0);
+    document.getElementById("specificDetails").innerHTML += "<br>proportion of max (" + String.fromCharCode(45796) + "): " + (dictVal ? Math.round((Math.round(10 ** (dictVal*7.17268911027) - 1) / 14882952)*10000000) / 10000000 : 0);
+    document.getElementById("specificDetails").innerHTML += "<br>rank: " + (dictVal ? sortedValues.indexOf(dictVal) + 1 : 2950);
     //document.getElementById("specificDetails").innerHTML += "<br>rank: " + sortedValues.findIndex(dictVal);
-    document.getElementById("specificDetails").innerHTML += "<br>color value: " + dictVal;
-    document.getElementById("specificDetails").innerHTML += "<br>log: " + (dictVal * 7.17268911027);
+    document.getElementById("specificDetails").innerHTML += "<br>color value: " + (dictVal ? dictVal : 0);
+    document.getElementById("specificDetails").innerHTML += "<br>log: " + (dictVal ? dictVal * 7.17268911027 : 0);
+    document.getElementById("specificDetails").innerHTML += "<br>U+" + Number(elem.id.slice(4,9)).toString(16);
+    document.getElementById("specificDetails").innerHTML += "<br>&amp;#" + elem.id.slice(4,9);
 }
 
 function switchToBW() {
@@ -203,7 +206,7 @@ function switchToBW() {
     var i;
     for (i = 0; i < x.length; i++) {
       thisVal = 100-freqDict['char'+ x[i].id.slice(4,9)]*100;
-      if (!thisVal) {
+      if (!thisVal && thisVal != 0) {
           thisVal = 100;
       }
       console.log(thisVal);
@@ -239,47 +242,22 @@ function reorderByFreq() {
     colorMode = "none";
     //let freqDictCopy = Object.assign({},freqDict);    // this makes a copy of freqDict, so that we can delete elements without making them unrecoverable
     document.getElementById("container").innerHTML = "";
-    var codesNotYetUsed = [];
-    for (var i = 44032; i < 55204; i++) {
-      codesNotYetUsed.push(i.toString());
-    }
-    //console.log(codesNotYetUsed);
 
-    for (var i = 0; i<2949; i++) {    // this section orders the 2949 blocks that have at least 1 instance
+    for (x of orderedBlocks) {    // this section orders the 2949 blocks that have at least 1 instance
 
-      var block = document.createElement("span");   // create new span
-
-      var currentMaxValue = Math.max.apply(Math,valuesArray);
-      var dictionaryKeyWithChar = Object.keys(freqDict).find(key => ( freqDict[key] == currentMaxValue && codesNotYetUsed.includes(key.slice(4,9))));
-      //console.log(dictionaryKeyWithChar);
-      var correctUnicodePoint = dictionaryKeyWithChar.slice(4,9);
-      valuesArray.splice(valuesArray.indexOf(currentMaxValue),1);
-      codesNotYetUsed.splice(codesNotYetUsed.indexOf(correctUnicodePoint),1)
-      var textContent = document.createTextNode( String.fromCharCode(correctUnicodePoint)  );    // make some content: it's a string in Hangul
-      block.appendChild(textContent);               // put the text content in the span
-      document.getElementById("container").appendChild(block);                  // put the span in the most-recently created div
-      //var elementForInsertion = document.getElementById("container");
-
-      block.setAttribute('id','char'+correctUnicodePoint);            // set the span's id to, e.g. 'char45678'
-      block.setAttribute('class','mainDisplayHangul');
-
-      block.setAttribute('onclick','showSpecific(this)');
-
-    }
-
-
-    for (var i = 0; i<8223; i++) {
         var block = document.createElement("span");   // create new span
-        var textContent = document.createTextNode( String.fromCharCode(codesNotYetUsed[i])  );    // make some content: it's a string in Hangul
+
+        var correctUnicodePoint = x.charCodeAt(0);
+        var textContent = document.createTextNode(x);    // make some content: it's a string in Hangul
         block.appendChild(textContent);               // put the text content in the span
         document.getElementById("container").appendChild(block);                  // put the span in the most-recently created div
+        //var elementForInsertion = document.getElementById("container");
 
-        block.setAttribute('id','char'+codesNotYetUsed[i]);            // set the span's id to, e.g. 'char45678'
+        block.setAttribute('id','char'+correctUnicodePoint);            // set the span's id to, e.g. 'char45678'
         block.setAttribute('class','mainDisplayHangul');
 
         block.setAttribute('onclick','showSpecific(this)');
     }
-    valuesArray = Object.values(freqDict);        // restoring valuesArray--we deleted everything in it!
 
     if (isCondensed) {
       condense();
