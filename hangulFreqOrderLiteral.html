@@ -23,12 +23,13 @@ top: 0px;
 border: 1px solid #D0D0D0;
 background-color: #FFFFFF;
 position: fixed;
-height: 50%;
+/* height: 50%; */
 width: 25%;
 left: 60%;
 top: 15%;
 display: none;
 text-align: center;
+padding-bottom: 25px;
 }
 
 #specificBlockBigDisplay {
@@ -195,7 +196,7 @@ function showSpecific(elem) {
     //document.getElementById("specificDetails").innerHTML += "<br>rank: " + sortedValues.findIndex(dictVal);
     document.getElementById("specificDetails").innerHTML += "<br>color value: " + (dictVal ? dictVal : 0);
     document.getElementById("specificDetails").innerHTML += "<br>log: " + (dictVal ? dictVal * 7.17268911027 : 0);
-    document.getElementById("specificDetails").innerHTML += "<br>U+" + Number(elem.id.slice(4,9)).toString(16);
+    document.getElementById("specificDetails").innerHTML += "<br>U+" + Number(elem.id.slice(4,9)).toString(16).toUpperCase();
     document.getElementById("specificDetails").innerHTML += "<br>&amp;#" + elem.id.slice(4,9);
 }
 
